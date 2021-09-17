@@ -1,0 +1,14 @@
+#cart {
+  margin-bottom: 0;
+
+  & .btn {
+    background: unset;
+    box-shadow: unset;
+    border: unset;
+  }
+}
+
+#cart.open > .btn {
+  background-color: unset;
+  color: white;
+}

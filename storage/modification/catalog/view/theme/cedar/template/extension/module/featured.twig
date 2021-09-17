@@ -1,0 +1,185 @@
+<section class="product">
+
+{#    <h3>{{ heading_title }}</h3>#}
+    <div class="product__side-bar">
+
+    </div>
+
+    <div class="product__wrapper">
+        {% for product in products %}
+            <div id="product" class="product-layout">
+                <div class="product-thumb transition">
+                    <div class="image"><a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive"/></a></div>
+                    <div class="caption">
+                        <h4><a href="{{ product.href }}">{{ product.name }}</a></h4>
+                        <p>{{ product.description }}</p>
+                        {% if options %}
+                            <hr>
+                            <h3>{{ text_option }}</h3>
+
+                            {% for option in options %}
+                                {% if option.type == 'radio' %}
+                                    <div class="form-group{% if option.required %} required {% endif %}">
+                                        <div id="input-option{{ option.product_option_id }}">
+                                            {% for option_value in option.product_option_value %}
+                                                <div class="radio visually-hidden">
+                                                    <input type="radio" class="visually-hidden" id="price-{{ loop.index }}" name="option[{{ option.product_option_id }}]" value="{{ option_value.product_option_value_id }}"/>
+
+                                                    <label>{{ option_value.name }}</label>
+                                                </div>
+                                            {% endfor %}
+
+                                            <div class="product__controls">
+                                                {% for option_value in option.product_option_value %}
+                                                    <label for="price-{{ loop.index }}">{{ option_value.name }}</label>
+                                                {% endfor %}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if product.price %}
+                            <p class="price">
+                                {% if not product.special %}
+                                    {{ product.price }}
+                                {% else %}
+                                    <span class="price-new">{{ product.special }}</span> <span class="price-old">{{ product.price }}</span>
+                                {% endif %}
+                                {% if product.tax %}
+                                    <span class="price-tax">{{ text_tax }} {{ product.tax }}</span>
+                                {% endif %}
+                            </p>
+                        {% endif %}
+
+                    </div>
+
+
+
+		{% if(config_on_off_qo_fm =='1') %}
+			<div class="fastorder">
+				<button class="btn-quick-order btn-lg btn-block" type="button" onclick="fastorder_open({{ product.product_id }});" title="{{ config_text_open_form_send_order[lang_id].config_text_open_form_send_order }}">
+					{% if(icon_open_form_send_order !='')%}
+						<i style="color:#{{ color_button_open_form_send_order }}" class="{{ icon_open_form_send_order }}"></i>
+					{% endif %}
+				<span>{{ config_text_open_form_send_order[lang_id].config_text_open_form_send_order }}</span>			
+			</button>
+			</div>
+		{% endif %}
+		
+                    <div class="button-group">
+                        <input type="hidden" name="product_id" value="{{ product.product_id }}"/>
+                        {# <button type="button" id="button-cart"><i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md">{{ button_cart }}</span></button> #}
+                        {# <button type="button" id="button-cart" onclick="cart.add('{{ product.product_id }}');"><i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md">{{ button_cart }}</span></button> #}
+                        {# <button type="button" onclick="cart.add('{{ product.product_id }}');"><span class="hidden-xs hidden-sm hidden-md">{{ button_cart }}</span> <i class="fa fa-shopping-cart"></i></button> #}
+                        <label class="control-label" for="input-quantity">{{ entry_qty }}</label>
+                        <input type="text" name="quantity" value="1" size="2" id="input-quantity" class="form-control"/>
+
+                        <button type="button" id="button-cart"><i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md">{{ button_cart }}</span></button>
+                        {# <button type="button" data-toggle="tooltip" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');"><i class="fa fa-heart"></i></button> #}
+                        {# <button type="button" data-toggle="tooltip" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');"><i class="fa fa-exchange"></i></button> #}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+</section>
+
+
+<script type="text/javascript">
+
+    $('#button-cart').on('click', function () {
+
+        $.ajax({
+            url: 'index.php?route=checkout/cart/add',
+            type: 'post',
+            data: $('#product input[type=\'text\'], #product input[type=\'hidden\'], #product input[type=\'radio\']:checked, #product input[type=\'checkbox\']:checked, #product select, #product textarea'),
+            dataType: 'json',
+            beforeSend: function () {
+                $('#button-cart').button('loading');
+            },
+            complete: function () {
+                $('#button-cart').button('reset');
+
+            },
+            success: function (json) {
+                if (json['error']) {
+                    if (json['error']['option']) {
+                        console.log('error');
+
+                        for (i in json['error']['option']) {
+                            var element = $('#input-option' + i.replace('_', '-'));
+
+                            if (element.parent().hasClass('input-group')) {
+                                element.parent().after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
+                            } else {
+                                element.after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
+                            }
+                        }
+                    }
+
+                    if (json['error']['recurring']) {
+                        $('select[name=\'recurring_id\']').after('<div class="text-danger">' + json['error']['recurring'] + '</div>');
+                    }
+                    $('.text-danger').parent().addClass('has-error');
+                }
+
+                if (json['success']) {
+                    console.log(json);
+                    alert("!!")
+
+                    // $('#cart > button').html('<span id="cart-total"><i class="fa fa-shopping-cart"></i> ' + json['total'] + '</span>');
+                    // $('#cart > button').html('<span id="cart-total">' + json['total'] + '</span>');
+                    // $('#cart > button').html('<span id="cart-total">' + json['total'] + '</span>');
+                    $('#cart > button').html('<div id="cart-total"><svg width="48" height="48"> <use xlink:href="#cart"></use> </svg><span>' + json['total'] + '</span></div>');
+
+                    // $('html, body').animate({scrollTop: 0}, 'slow');
+
+                    $('#cart > ul').load('index.php?route=common/cart/info ul li');
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                // console.log('json-er')
+                console.log('error');
+
+
+                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
+    });
+
+    function AjaxLivePrice3() {
+        $.ajax({
+            type: 'POST',
+            url: 'index.php?route=product/product/price_live',
+            data: $('#product input[type=\'text\'], #product input[type=\'hidden\'], #product input[type=\'radio\']:checked, #product  input[type=\'checkbox\']:checked, #product select, #product textarea, #product input[name=\'quantity\']'),
+            dataType: 'json',
+            success: function (json) {
+                if (json.success) {
+                    console.log(json);
+                    $('#content .price').html(json.new_price.price);
+                    $('#content .price-specail').html(json.new_price.special);
+                    $('#content .tax').html("{{ text_tax }} " + json.new_price.tax);
+                }
+            },
+
+            error: function () {
+                console.log('json-er')
+
+            }
+        });
+    }
+
+    $('#product input[type=\'text\'], #product input[type=\'hidden\'], #product input[type=\'radio\'], #product input[type=\'checkbox\'], #product select, #product textarea').on('change', function () {
+        AjaxLivePrice3();
+    });
+    $('#product input[name=\'quantity\']').on('keyup', function () {
+        AjaxLivePrice3();
+    });
+
+    let options = document.querySelector('#product').querySelectorAll('input[type=\'radio\']');
+    options[0].click();
+
+</script>

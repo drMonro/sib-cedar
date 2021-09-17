@@ -1,0 +1,23 @@
+{
+  "name": "deploy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-plumber": "^1.2.1",
+    "gulp-rsync": "0.0.8",
+    "gulp-sass-glob": "^1.1.0"
+  },
+  "dependencies": {
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "rimraf": "^3.0.1",
+    "sal.js": "^0.7.2"
+  }
+}

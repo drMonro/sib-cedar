@@ -1,0 +1,69 @@
+@mixin transition($properties...) {
+  transition-timing-function: $transition-timing-function;
+  transition-duration: $transition-duration;
+  transition-property: $properties;
+}
+
+@mixin effect-opacity {
+  @include transition(opacity);
+
+  outline: none;
+
+  &:hover,
+  &:focus {
+    opacity: 0.7;
+  }
+
+  &:active {
+    opacity: 0.5;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: $mobile - 1px) {
+    @content;
+  }
+}
+
+@mixin mobile-max {
+  @media (max-width: $mobile-max - 1px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: $tablet - 1px) {
+    @content;
+  }
+}
+
+
+@mixin tablet-max {
+  @media (max-width: $tablet-max - 1px) {
+    @content;
+  }
+}
+
+@mixin desktop-min {
+  @media (max-width: $desktop-min - 1px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (max-width: $desktop - 1px) {
+    @content;
+  }
+}
+
+@mixin desktop-max {
+  @media (max-width: $desktop-max - 1px) {
+    @content;
+  }
+}
+
+@mixin desktop-retina {
+  @media (min-resolution: $retina-dpi), (min-resolution: $retina-dppx) {
+    @content;
+  }
+}

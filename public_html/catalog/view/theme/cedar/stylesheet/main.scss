@@ -1,0 +1,42 @@
+@import "global/variables";
+@import "global/mixins";
+@import "global/fonts";
+@import "global/global";
+@import "blocks/button";
+
+
+
+//Libraries styles
+@import "vendor/mmenu";
+@import "vendor/mhead.css";
+@import "vendor/hamburger/hamburgers-settings";
+@import "vendor/hamburger/hamburgers";
+//@import "libs/sal";
+//@import "libs/hamburgers/hamburgers";
+//@import "libs/fotorama";
+//@import "libs/swiper.min";
+
+
+//Common blocks
+@import "common/cart";
+//@import "blocks/page-footer";
+//@import "blocks/modal";
+
+//Sections blocks
+@import "blocks/header";
+@import "blocks/teaser";
+@import "blocks/product";
+
+//@import "blocks/index/preloader";
+//@import "blocks/index/about";
+//@import "blocks/index/products";
+//@import "blocks/index/catalog";
+//@import "blocks/index/quality";
+//@import "blocks/index/gallery";
+//@import "blocks/index/certificates";
+//@import "blocks/index/partners";
+//@import "blocks/index/contacts";
+//@import "blocks/index/map";
+//@import "blocks/feedback-popup";
+//@import "blocks/order-popup";
+//@import "blocks/policy";

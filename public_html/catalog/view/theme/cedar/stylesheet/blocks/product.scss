@@ -1,0 +1,29 @@
+.product {
+  display: flex;
+  &__side-bar {
+    width: 30%;
+    background-image: url(../image/bg-wood.jpg);
+    background-size: cover;
+  }
+
+  & .product__wrapper {
+    width: 70%;
+  }
+}
+
+.product__controls {
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+  border-radius: 30px;
+  width: 471px;
+
+  & label {
+    margin: 0;
+    border-radius: 30px;
+    padding: 8px;
+    background-color: #EDF0F5;
+    //height: 100%;
+  }
+}
